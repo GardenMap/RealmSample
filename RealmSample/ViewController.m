@@ -76,6 +76,24 @@ RLM_ARRAY_TYPE(Dog)
     
     RLMResults *result = [Dog objectsWhere:@"age < 5"];
     NSLog(@"Dog Count：%lu", (unsigned long)result.count);
+    
+    //Call anywhere
+    dispatch_async(dispatch_queue_create("background", 0), ^{
+        Dog *thedog = [[Dog objectsWhere:@"age < 10"] firstObject];
+        RLMRealm *realm = [RLMRealm defaultRealm];
+        if (thedog != nil) {
+            [realm beginWriteTransaction];
+            thedog.name = @"name changed";
+            thedog.age = 100;
+            [realm commitWriteTransaction];
+        }
+    });
+    
+    result = [Dog objectsWhere:@"age == 100"];
+    NSLog(@"count:%lu",(unsigned long)result.count);
+    Dog *changeddog = (Dog *)[result firstObject];
+    NSLog(@"name:%@",changeddog.name);
+    NSLog(@"age:%ld",(long)changeddog.age);
 }
 
 @end
