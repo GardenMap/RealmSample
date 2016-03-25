@@ -9,6 +9,41 @@
 #import "ViewController.h"
 #import <Realm/Realm.h>
 
+//Define Model With out Teamplate
+
+@interface Article : RLMObject
+
+@property NSString *num;
+@property NSString *title;
+@property NSString *link;
+@property NSString *author;
+@property NSString *tag;
+@property NSInteger weight;
+
+RLM_ARRAY_TYPE(Article);
+
+@end
+
+@implementation Article
+
++ (NSString *) primarykey{
+    return @"num";
+}
+
++ (NSString *) indexedProperties{
+    return @[@"title"];
+}
+
++ (NSString *) defaultPropertyValues{
+    return @{@"author":@"chenkai"};
+}
+
++ (NSString *) ignoredProperties{
+    return @[@"weight"];
+}
+
+@end
+
 
 //Define models
 @interface Dog : RLMObject
@@ -43,6 +78,7 @@ RLM_ARRAY_TYPE(Dog)
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self createdatabase];
     [self realmuserage];
 }
