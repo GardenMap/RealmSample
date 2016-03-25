@@ -43,11 +43,37 @@ RLM_ARRAY_TYPE(Dog)
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self createdatabase];
     [self realmuserage];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+#pragma mark 构建数据库
+
+- (void)createdatabase{
+    //DataBase can't created twice
+    //RLMRealm de
+
+    //Create Default DataBase on Default Path [默认路径]
+    RLMRealm *defaultDB = [RLMRealm defaultRealm];
+    NSLog(@"default database path:%@",[RLMRealm defaultRealmPath]);
+    
+    //Create Customer DataBase [自定义路径]
+    NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *dbPath = [docPath stringByAppendingPathComponent:@"database/db.realm"];
+    RLMRealm *customerDB = [RLMRealm realmWithPath:dbPath];
+    NSLog(@"customer database path:%@",dbPath);
+    
+    //Create Customer DataBase [设置权限 - 只读]
+    customerDB = [RLMRealm realmWithPath:dbPath readOnly:YES error:nil];
+    
+    //[内存数据库]
+    RLMRealm *memoryDB = [RLMRealm inMemoryRealmWithIdentifier:@"realmMemoryDB"];
+    //每次应用程序退出时不会保存数据,
+    //如果某个内存Realm实例没有被引用，所有的数据在实例对象释放的适合也会被释放.
 }
 
 #pragma mark 概览用法
